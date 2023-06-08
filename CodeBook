@@ -1,0 +1,62 @@
+The run_analysis.R script provides a code used to satisfy the 5 step preparation for the data set provided for the Getting and Cleaning data
+Course project.
+
+Called for "dplyr" package to use its verbs and other integrated functions.
+
+1.- a) Downloaded the data and unziped the files into a folder named: getdata_projectfiles_UCI HAR Dataset.
+    b) Read the data usig Rstudio "import dataset" function in the "Enviroment" tab.
+    c) Imported the appropriate code into source script and added col.names argument to avoid confussion due to the default variable names.
+    d) Datasets names and overall summary:
+        - activity_labels.txt <- code and associated activities / 6 obs. 2 variables
+        - features.txt <- variable names corresponding to the test and train experiments / 561 obs. 2 variables
+        - subject_test.txt <- subject code for the "test" evaluation for the different activities and features / 2947 obs. 1 variable
+        - subject_train.txt <- subject code for the "train" evaluation for the different activities and features / 7352 obs. 1 variable
+        - y_test.txt <- activity code for the "test" evaluation / 2947 obs. 1 variable
+        - x_test.txt <- normalized observations for the "test" evaluation for each feature and activitiy / 2947 obs. 561 variables
+        - y_train.txt <- activity code for the "train" evaluation / 7352 obs. 1 variable
+        - x_train.txt <- normalized observations for the "train" evaluation for each feature and activity / 7352 obs. 561 variables
+        
+2.- Merging the datasets
+    a) test <- Creates data.frame object using cbind() for the y_test & x_test datasets. 
+    b) train <- Creates data.frame object using cbind() for the y_train & x_train datasets.
+    c) subjects <- Creates data.frame object using rbind() for the subject_test & subject_train datasets.
+    d) test_train <- Creates data.frame object using rbind() for the test and train data.frames created previously.
+    e) mergeddf <- Creates data.frame object using cbind() for the subjects and test_train data.frames created previously.
+        NOTE: the order in which the datasets and dataframes are prompted in rbind() & cbind() is crucial to maintain the
+        correlation between the features, activity codes and subjects.
+
+3.- Selecting only the mean and std values computed (features).
+    a) tidydf <- uses the select() & contains() functions on the mergeddf dataframe via the pipe opperator too subset the data columns 
+       for: subject, code and all columns that contain either "mean" or "std" in their name.
+
+4.- Setting descriptive activity and variable names for the dataset.
+    a) Assing activity name for each code in tidydf.
+    b) Renamed code column in tidydf into activities.
+    c) Rename "tBody" fragments into "TimeBody" in names(tidydf).
+    d) Rename "Acc" fragments into "Accelerometer" in names(tidydf).
+    e) Rename "-mean()" fragments into "Mean" in names(tidydf).
+    f) Rename "-std()" fragments into "STD" in names(tidydf).
+    g) Rename "^t" fragments into "Time" in names(tidydf).
+    h) Rename "Gyro" fragments into "Gyroscope" in names(tidydf).
+    i) Rename "Mag" fragments into "Magnitude" in names(tidydf).
+    j) Rename "^f" fragments into "Frequency" in names(tidydf).
+    k) Rename "-meanfreq()" fragments into "MeanFrequency" in names(tidydf).
+    l) Rename "BodyBody" fragments into "Body" in names(tidydf).
+    m) Rename "gravity" fragments into "Gravity" in names(tidydf).
+    n) Rename "angle" fragments into "Angle" in names(tidydf).
+        NOTE: 1) names(tidydf) is used because gsub() requieres a string vector as input.
+              2) "^" operator indicates the evaluation of the string should be conducted in start point from left to right.
+    
+ 5.- Creating second independent tidy dataset with the average value for each variable for each activity and each subject.
+     a) tidydf2 <- uses the group_by() and summarise_all() functions on tidydf via the pipe operator.
+     b) First group_by() groups the dataset by subjects and activities (in that order), the data is already grouped this way but
+        this function serves to indicate how the next computation should be computed and thus, determines the final result. 
+     c) sumarrise_all() aplies the mean function to each variable paired by subject and activity. 
+    
+    
+ 
+
+
+
+
+
